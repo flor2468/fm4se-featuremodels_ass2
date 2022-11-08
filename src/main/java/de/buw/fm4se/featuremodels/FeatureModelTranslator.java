@@ -108,7 +108,7 @@ public class FeatureModelTranslator {
 
         //Or(root.getName(), allChildren);
 
-
+        result = root.getName() + " & ";
 
         for (int i = 0; i < allChildren.size(); i++) {
 
