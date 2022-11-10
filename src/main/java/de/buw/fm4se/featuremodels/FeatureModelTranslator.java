@@ -99,8 +99,6 @@ public class FeatureModelTranslator {
 
     public static String translateToFormula(FeatureModel fm) {
 
-        // TODO implement a real translation
-
         List<Feature> allChildren = fm.getRoot().getChildren();
         Feature root = fm.getRoot();
 
@@ -116,6 +114,14 @@ public class FeatureModelTranslator {
 
             GroupKind kind = allChildren.get(i).getChildGroupKind();;
 
+            if (allChildren.get(i).isMandatory()) {
+                result += mandatorySubfeature(root, allChildren.get(i));
+
+            } else {
+                result += parent(root, allChildren.get(i));
+
+            }
+            result += " & ";
 
             for (int j = 0; j < newChildren.size(); ++j) {
                 //kind = newChildren.get(j).getChildGroupKind(); // assumed to be the same for all children
