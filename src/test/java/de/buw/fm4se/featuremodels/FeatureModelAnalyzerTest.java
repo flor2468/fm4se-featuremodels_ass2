@@ -14,6 +14,10 @@ class FeatureModelAnalyzerTest {
   void testCheckConsistentCarFM() {
     assertTrue(FeatureModelAnalyzer.checkConsistent(ExampleFmCreator.getSimpleFm()));
   }
+  @Test
+  void testCheckAdditionalLevelCarFM1() {
+    assertTrue(FeatureModelAnalyzer.checkConsistent(ExampleFmCreator.getComplexFm()));
+  }
   
   @Test
   void testCheckConsistentBadFM() {

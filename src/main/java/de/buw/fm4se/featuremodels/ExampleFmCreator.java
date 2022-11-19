@@ -38,7 +38,36 @@ public class ExampleFmCreator {
 
     return m;
   }
+  public static FeatureModel getComplexFm() {
+    // Feature Model with additional Level
 
+    FeatureModel m = new FeatureModel();
+
+    Feature car = new Feature("car");
+    m.setRoot(car);
+
+    Feature motor = car.addChild("motor", true);
+
+    motor.setChildGroupKind(GroupKind.XOR);
+    motor.addChild("gasoline", false);
+    Feature electric = motor.addChild("electric", false);
+
+    Feature comfort = car.addChild("comfort", false);
+    comfort.setChildGroupKind(GroupKind.OR);
+    Feature heating = comfort.addChild("heating", false);
+    comfort.addChild("entertainment", false);
+
+
+
+    Feature comfort_child = comfort.addChild("comfort_child", false);
+    comfort_child.setChildGroupKind(GroupKind.OR);
+    Feature comfort_child_1 = comfort_child.addChild("comfort_child_1", false);
+    comfort_child.addChild("comfort_child_2", false);
+
+    m.addConstraint(new CrossTreeConstraint(electric, CrossTreeConstraint.Kind.REQUIRES, heating));
+
+    return m;
+  }
   /**
    * constructs a FM where the mandatory child excludes the root
    * @return

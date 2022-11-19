@@ -104,9 +104,8 @@ public class FeatureModelTranslator {
 
         String result = "";
 
-        //Or(root.getName(), allChildren);
 
-        result = root.getName() + " & ";
+        result = root.getName();
 
         for (int i = 0; i < allChildren.size(); i++) {
 
@@ -115,47 +114,35 @@ public class FeatureModelTranslator {
             GroupKind kind = allChildren.get(i).getChildGroupKind();;
 
             if (allChildren.get(i).isMandatory()) {
-                result += mandatorySubfeature(root, allChildren.get(i));
-
+                result += " & " + mandatorySubfeature(root, allChildren.get(i));
             } else {
-                result += parent(root, allChildren.get(i));
-
+                result += " & " + parent(root, allChildren.get(i));
             }
-            result += " & ";
 
             for (int j = 0; j < newChildren.size(); ++j) {
-                //kind = newChildren.get(j).getChildGroupKind(); // assumed to be the same for all children
 
-                if (newChildren.get(i).getChildGroupKind() == NONE) {
-                    if (newChildren.get(i).isMandatory()) {
-                        result += mandatorySubfeature(allChildren.get(i), newChildren.get(j));
+                if (newChildren.get(j).getChildGroupKind() == NONE) {
+                    if (newChildren.get(j).isMandatory()) {
+                        result += " & " + mandatorySubfeature(allChildren.get(i), newChildren.get(j));
 
                     } else {
-                        result += parent(allChildren.get(i), newChildren.get(j));
+                        result += " & " + parent(allChildren.get(i), newChildren.get(j));
 
-                    }
-
-                    if (j < newChildren.size() - 1) {
-                        System.out.println("j: " + j);
-                        result += " & ";
                     }
                 }
             }
 
-            if (kind == OR){
-                result += " & " + Or(allChildren.get(i).getName(),newChildren);
-            }else if(kind == XOR){
-                result += " & " + Xor(allChildren.get(i).getName(),newChildren);
+            if (!newChildren.isEmpty()) {
+                if (kind == OR) {
+                    result += " & " + Or(allChildren.get(i).getName(), newChildren);
+                } else if (kind == XOR) {
+                    result += " & " + Xor(allChildren.get(i).getName(), newChildren);
+                }
             }
 
-
-            allChildren.addAll(newChildren);
-
-            if (newChildren.size() > 0){
-                result += " & ";
-            }
+            allChildren.addAll(newChildren); // Over these children the loop will iterate again, they are also considered
         }
-        result += CrossTreeConstraints(fm);
+        result += " & " + CrossTreeConstraints(fm);
 
         System.out.println("result: " + result);
         return result;
